@@ -182,6 +182,7 @@ Representa los estados posibles dentro de un workflow.
 - esta tabla modela estados, no la matriz fina de transiciones por actor y escenario
 - en `v0.2`, la validación de transiciones se resuelve principalmente en la capa lógica de aplicación, alineada con la matriz funcional
 - como extensión futura podría evaluarse una estructura complementaria (por ejemplo `workflow_transition` y reglas por rol/escenario), sin volverla obligatoria en esta etapa
+- el contrato mínimo con `communication` exige que el estado actual y el estado inicial de cada comunicación pertenezcan al workflow asociado a su tipo
 
 ---
 
@@ -262,7 +263,6 @@ Representa la comunicación como entidad principal del dominio.
 - `updated_by_user_id` → user, nullable
 - `closed_at`, nullable
 - `closed_by_user_id` → user, nullable
-- `formal_response_id` → formal_response, nullable o relación inversa
 - `created_at`
 - `updated_at`
 
@@ -281,6 +281,10 @@ Representa la comunicación como entidad principal del dominio.
 - una comunicación debe tener estado actual
 - una comunicación debe tener usuario creador
 - una comunicación debe tener organización creadora o emisora
+- el `current_state_id` debe pertenecer al workflow asociado al `communication_type_id` de la comunicación
+- al crear la comunicación, el estado inicial debe ser un `workflow_state` inicial del workflow asociado a su tipo
+- los cambios de estado válidos se controlan en capa lógica/servicio alineada con la matriz funcional
+- la lógica de transiciones detallada puede formalizarse más adelante con una estructura complementaria, sin volverla obligatoria en `v0.2`
 
 ---
 
@@ -432,9 +436,11 @@ Representa una versión concreta de un documento.
 - `version_number` único por documento
 
 ### Observaciones
-- `is_visible_to_external` puede usarse como ayuda técnica para exposición documental
-- no debe interpretarse como toda la regla funcional de visibilidad externa
-- la exposición real también depende del contexto de la comunicación y del escenario (documento propio, adjunto inicial expuesto, documento final incluido en respuesta, etc.)
+- regla funcional `v0.2`: el externo ve documentos cargados por su propia organización
+- regla funcional `v0.2`: el externo ve adjuntos expuestos en el envío inicial
+- regla funcional `v0.2`: el externo ve documentos incluidos en la respuesta formal
+- regla funcional `v0.2`: el externo no ve documentos internos de trabajo de FREBA
+- `is_visible_to_external` puede usarse como ayuda técnica de implementación, pero no reemplaza por sí solo la regla funcional
 
 ---
 
@@ -635,6 +641,16 @@ Debe evitarse duplicar filas activas innecesarias en `communication_assignment`.
 ## 16.5 Una sola asociación principal de expediente por comunicación en v0.2
 Aunque el modelo soporte más, el uso operativo inicial será único.
 
+## 16.6 Estado vigente consistente con workflow del tipo
+`communication.current_state_id` debe pertenecer al workflow asociado a `communication.communication_type_id`.
+
+## 16.7 Estado inicial consistente al crear
+La comunicación debe iniciar en un `workflow_state` marcado como inicial dentro del workflow asociado a su tipo.
+
+## 16.8 Transiciones válidas en capa lógica
+En `v0.2`, la validación de transiciones se implementa en servicios/capa lógica.  
+Como extensión futura puede formalizarse una estructura persistente de transiciones, sin volverla obligatoria en esta etapa.
+
 ---
 
 ## 17. Decisiones de modelado recomendadas
@@ -655,6 +671,10 @@ Modelarla como tabla separada con unique sobre `communication_id`.
 ### Justificación
 Preserva claridad conceptual e inmutabilidad.
 
+### Regla estructural de fuente única
+- `formal_response.communication_id` (unique) es la única fuente de verdad para vincular respuesta y comunicación
+- `communication` no debe tener `formal_response_id` como relación paralela
+
 ---
 
 ## 17.3 Versionado documental
@@ -668,22 +688,14 @@ Es la forma más robusta de preservar trazabilidad y vigencia.
 
 ## 17.4 Relaciones entre comunicaciones
 ### Recomendación
-Usar tabla explícita de relaciones en lugar de un simple `parent_id` directo en `communication`.
+Usar tabla explícita `communication_relation`.
 
 ### Justificación
-Da más flexibilidad futura y mantiene el vínculo como entidad propia.
+Mantiene el vínculo como entidad propia sin perder simplicidad operativa.
 
-### Alternativa más simple
-Usar `parent_communication_id` nullable en `communication`.
-
-### Trade-off
-- más simple para madre-hija
-- menos flexible para crecer
-
-### Recomendación final
-Si querés simplicidad máxima inicial, `parent_communication_id` podría ser viable.  
-Si querés una base más robusta y extensible, conviene `communication_relation`.
-En cualquiera de las dos opciones, para `v0.2` conviene operar con `relation_type = child_of` como caso principal.
+### Regla operativa `v0.2`
+- el caso canónico actual de `relation_type` es `child_of`
+- otros tipos de relación quedan como extensión potencial futura y no forman parte del eje operativo actual
 
 ---
 
@@ -743,8 +755,8 @@ Tomar como base inicial este orden de modelado:
 
 ## 20. Pendientes a validar más adelante
 
-- diferencia real entre editor y responsable
-- si `communication_relation` será tabla separada o bastará `parent_id`
+- diferencia futura de negocio entre editor y responsable (sin impacto en implementación `v0.2`)
+- si se habilitarán tipos de relación adicionales a `child_of`
 - si conviene formalizar una estructura persistente de transiciones (por ejemplo `workflow_transition`) o mantenerlas en capa lógica en esta etapa
 - si `document_kind` necesita catálogo propio
 - si `organization_type` necesita tabla o alcanza con choice

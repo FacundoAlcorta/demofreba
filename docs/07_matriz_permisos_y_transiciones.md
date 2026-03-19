@@ -82,7 +82,7 @@ Los externos nunca deben ver por defecto:
 
 ## 2.4 Editor y Responsable
 
-En `v0.2`, **Editor** y **Responsable** se consideran equivalentes en permisos.
+En `v0.2`, **Editor** y **Responsable** se consideran equivalentes en permisos y operaciones de implementación.
 
 Mientras negocio no defina diferencias reales, esta matriz los trata igual.
 
@@ -199,20 +199,25 @@ Para esta matriz, las acciones se agrupan en:
 | Ver estado actual | Sí | Visible |
 | Ver respuesta formal | Sí | Si ya fue emitida |
 | Ver documentos del envío inicial | Sí | Los expuestos por FREBA al enviarla |
+| Ver documentos de su propia organización | Sí | Puede consultar los que cargó su organización |
 | Ver documentos internos FREBA no expuestos | No | No corresponde |
 | Subir documentos | Sí | Para construir la respuesta |
 | Subir nueva versión documental | Sí | Sobre documentos de trabajo que le correspondan |
 | Editar datos habilitados | Sí | Según el tipo y el flujo |
 | Cambiar estado | Sí | Solo dentro de estados operativos del escenario de respuesta |
+| Cerrar comunicación (cierre administrativo final) | No en `v0.2` | Reservado a FREBA |
 | Crear respuesta formal | Sí | Cuando le corresponda responder |
 | Usar chat compartido | Sí | Canal operativo con FREBA |
 | Usar chat interno | No | Nunca |
 | Agregar usuarios de su organización | Sí | Solo de su misma organización |
-| Quitar usuarios de su organización | Sí | Si el flujo lo habilita |
+| Quitar usuarios de su organización | Sí | Solo de su misma organización |
+| Ver participantes de su propia organización | Sí | Solo participantes de su misma organización |
+| Ver participantes internos FREBA | No | No corresponde |
+| Ver participantes de otras organizaciones externas | No | No corresponde |
 | Agregar usuarios de otra organización | No | Nunca |
 | Ver expediente | No | Nunca |
 | Ver historial interno completo | No | Nunca |
-| Crear subcomunicación | Pendiente (no habilitado explícitamente en `v0.2`) | Requiere definición de negocio para habilitarse como regla general |
+| Crear subcomunicación | No habilitado en `v0.2` (pendiente de definición de negocio) | No se habilita como regla general en esta versión |
 | Ver referencia contextual básica | Sí | Puede ver lo necesario para entender su comunicación, no todo el contexto interno |
 
 ---
@@ -231,8 +236,8 @@ Para esta matriz, las acciones se agrupan en:
 | Usar chat compartido | Sí | Si el escenario lo requiere |
 | Agregar usuarios | Sí | Según rol operativo |
 | Asociar expediente | Sí | Si tiene rol editor/responsable sobre la comunicación |
-| Crear subcomunicación | Sí | Si el caso lo requiere |
-| Emitir respuesta formal | Sí | Si corresponde dentro del flujo |
+| Crear subcomunicación | Sí | Como usuario interno operativo con asignación activa |
+| Emitir respuesta formal | Sí | Si su rol operativo y el workflow lo habilitan |
 
 ---
 
@@ -272,13 +277,13 @@ Para esta matriz, las acciones se agrupan en:
 | Ver historial | Sí | Si es interno con acceso a la comunicación |
 | Ver documentos | Sí | Sí |
 | Ver expediente | Sí | Si tiene acceso a la comunicación |
-| Editar | No, excepto con rol operativo | Depende del rol |
-| Cambiar estado | No, excepto con rol operativo | Depende del rol |
+| Editar | No | El escenario I3 es de seguimiento limitado |
+| Cambiar estado | No | El escenario I3 es de seguimiento limitado |
 | Crear respuesta formal | No | Si no tiene rol operativo |
-| Usar chat interno | Depende | Si el rol/visibilidad lo permite |
-| Usar chat compartido | Depende | Si participa activamente |
-| Agregar usuarios | No | Excepto con rol operativo |
-| Crear subcomunicación | No | Excepto con rol operativo |
+| Usar chat interno | No | El escenario I3 no opera chat interno |
+| Usar chat compartido | No | El escenario I3 no opera chat compartido |
+| Agregar usuarios | No | El escenario I3 no administra participantes |
+| Crear subcomunicación | No | El escenario I3 no abre nuevas gestiones |
 
 ---
 
@@ -299,8 +304,8 @@ Para esta matriz, las acciones se agrupan en:
 | Agregar usuarios | No | No |
 | Quitar usuarios | No | No |
 | Usar chat interno | No | Nunca |
-| Usar chat compartido | Depende del escenario | Puede estar habilitado para seguimiento externo según caso |
-| Ver expediente | No para externos / Sí para internos si corresponde | Depende del tipo de usuario y acceso |
+| Usar chat compartido | No en `v0.2` | El rol observador no opera intercambio compartido |
+| Ver expediente | Sí para internos con acceso / No para externos | Regla fija por tipo de actor |
 
 ---
 
@@ -319,13 +324,13 @@ Para esta matriz, las acciones se agrupan en:
 | Usar chat interno | Sí para internos | No para externos |
 | Usar chat compartido | Sí | Si el escenario lo requiere |
 | Asociar expediente | Sí para internos | No para externos |
-| Crear subcomunicación | Sí para internos / Pendiente para externos en E2 | Para externo respondedor no está habilitado explícitamente en `v0.2` y requiere definición de negocio |
+| Crear subcomunicación | Sí para internos / No habilitado en `v0.2` para externos en E2 | Para externo respondedor queda pendiente de definición de negocio para una versión futura |
 
 ---
 
 ## 6.3 Responsable
 
-En `v0.2`, tiene el mismo alcance que Editor.
+En `v0.2`, tiene el mismo alcance que Editor, incluyendo implementación operativa.
 
 La separación conceptual se mantiene para permitir evolución futura, pero no cambia esta matriz.
 
@@ -341,6 +346,7 @@ Un externo nunca ve:
 - historial interno detallado
 - chat interno
 - asignaciones internas completas de FREBA
+- participantes de otras organizaciones externas
 - documentos internos no expuestos
 
 ---
@@ -351,6 +357,7 @@ Un externo puede ver, según escenario:
 
 - datos generales de la comunicación
 - estado actual
+- participantes de su propia organización
 - documentos que cargó su organización
 - documentos del envío inicial visibles para él
 - respuesta formal
@@ -381,7 +388,7 @@ Un usuario interno con acceso operativo puede ver:
 | Actor | Acceso |
 |---|---|
 | Interno FREBA operativo | Sí |
-| Interno FREBA seguimiento | Depende del rol |
+| Interno FREBA seguimiento | No |
 | Externo iniciador | No |
 | Externo respondedor | No |
 
@@ -397,7 +404,7 @@ El chat interno es exclusivamente de FREBA.
 | Interno FREBA operativo | Sí |
 | Externo iniciador | Sí, cuando el flujo lo permita |
 | Externo respondedor | Sí |
-| Observador puro sin participación compartida | No necesariamente |
+| Observador puro sin participación compartida | No en `v0.2` |
 
 ### Regla
 El chat compartido existe para intercambio operativo entre FREBA y la contraparte externa.
@@ -410,11 +417,19 @@ El chat compartido existe para intercambio operativo entre FREBA y la contrapart
 
 | Tipo de documento | Interno FREBA | Externo iniciador | Externo respondedor |
 |---|---|---|---|
-| Documento inicial de la comunicación | Sí | Sí si lo cargó o si se le expone | Sí |
+| Documento cargado por su propia organización | Sí | Sí | Sí |
+| Documento del envío inicial expuesto al externo | Sí | Sí, si FREBA lo expuso | Sí, si FREBA lo expuso |
 | Documento interno de trabajo FREBA | Sí | No | No |
-| Documento cargado por el externo | Sí | Sí | Sí |
-| Última versión documental interna | Sí | No, excepto exposición explícita | No, excepto exposición explícita |
+| Documento cargado por otra organización externa | Sí | No | No |
 | Documento incluido en respuesta formal | Sí | Sí | Sí |
+
+### Regla operativa de visibilidad documental externa (`v0.2`)
+
+- el externo ve documentos cargados por su propia organización
+- ve adjuntos expuestos en el envío inicial
+- ve documentos incluidos en la respuesta formal
+- no ve documentos internos de trabajo de FREBA
+- cualquier ayuda técnica de implementación (por ejemplo flags de exposición) no reemplaza esta regla funcional
 
 ---
 
@@ -424,7 +439,7 @@ El chat compartido existe para intercambio operativo entre FREBA y la contrapart
 |---|---|---|---|
 | Subir documento | Sí | Solo al crear | Sí |
 | Versionar documento | Sí | No | Sí |
-| Ver historial completo de versiones | Sí | No | No, excepto si una regla futura define exposición explícita |
+| Ver historial completo de versiones | Sí | No | No en `v0.2` |
 | Seleccionar documento para respuesta | Sí | No | Sí, si le toca responder |
 
 ---
@@ -481,7 +496,7 @@ El chat compartido existe para intercambio operativo entre FREBA y la contrapart
 |---|---|---|
 | Interno FREBA operativo | Sí | Sí |
 | Externo iniciador | Sí, como réplica posterior | Por continuidad luego de respuesta formal final; normalmente sobre comunicación ya cerrada o finalizada y propia |
-| Externo respondedor | Pendiente (no habilitado explícitamente en `v0.2`) | Requiere definición de negocio |
+| Externo respondedor | No habilitado en `v0.2` (pendiente de definición de negocio) | No se habilita como regla general en esta versión |
 
 ---
 
@@ -553,12 +568,12 @@ El externo iniciador no opera el workflow principal de tratamiento.
 | Desde | Hacia | Permitido | Observaciones |
 |---|---|---|---|
 | Inicial | En trabajo | Sí | Si le toca preparar respuesta |
-| En trabajo | Pendiente de respuesta | Sí | Opcional según workflow |
+| En trabajo | Pendiente de respuesta | Sí, cuando el estado exista en el workflow del tipo | Si el workflow no incluye ese estado, esta transición no aplica |
 | En trabajo / Pendiente de respuesta | Respondida | Sí | Cuando emite respuesta |
-| Respondida | Cerrada | Preferentemente FREBA | Puede reservarse a cierre administrativo del flujo |
+| Respondida | Cerrada | No para E2 en `v0.2` | Cierre administrativo reservado a FREBA |
 
-### Recomendación
-Aunque el externo pueda dejar la comunicación en “Respondida”, el cierre administrativo definitivo conviene reservarlo a FREBA si el flujo lo requiere.
+### Regla operativa `v0.2`
+En escenario E2, el externo puede llevar la comunicación a estado “Respondida”, pero el cierre administrativo final queda del lado de FREBA.
 
 ---
 
@@ -594,7 +609,7 @@ Si el tema continúa luego de respuesta final:
 ## 17. Pendientes a refinar más adelante
 
 ### 17.1 Diferencia real entre Editor y Responsable
-Hoy la matriz los trata igual.
+En `v0.2`, la matriz los trata igual por decisión de implementación.
 
 ### 17.2 Transiciones exactas por tipo de comunicación
 Esta matriz propone criterios generales, no workflows definitivos por tipo.

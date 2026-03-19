@@ -264,6 +264,17 @@ El sistema debe poder reconstruir:
 
 ---
 
+## 3.18 En `v0.2`, Editor y Responsable son equivalentes de implementación
+
+### Decisión
+En `v0.2`, **Editor** y **Responsable** se implementan con el mismo alcance funcional en permisos y operaciones.
+
+### Implicancia
+- backend puede tratarlos igual para autorización y operaciones núcleo
+- la diferencia conceptual se conserva solo como nomenclatura de dominio para una evolución futura
+
+---
+
 ## 4. Supuestos operativos adoptados para poder avanzar
 
 ## 4.1 No hay borradores de comunicación en v0.2
@@ -289,13 +300,13 @@ Simplificar el modelo y mantener la respuesta como pieza final cerrada.
 
 ---
 
-## 4.3 Editor y Responsable tienen el mismo alcance funcional
+## 4.3 Diferencia de negocio futura entre Editor y Responsable
 
 ### Supuesto
-Mientras negocio no defina diferencias concretas, ambos roles se consideran equivalentes.
+La diferencia de negocio entre ambos roles queda para una versión futura y no forma parte de la implementación de `v0.2`.
 
 ### Motivo
-Permitir avanzar sin bloquear el diseño por una diferencia aún no acordada.
+Evitar frenar la implementación actual por una distinción todavía no validada por negocio.
 
 ### Posible revisión futura
 Más adelante podrían diferenciarse por:
@@ -536,7 +547,8 @@ Aunque hoy haya reglas generales, más adelante puede definirse una matriz de tr
 ## 6.1 Diferencia fina entre Editor y Responsable
 
 ### Estado actual
-No definida.
+En `v0.2` queda cerrada su equivalencia de implementación.  
+La diferencia fina de negocio para una versión futura sigue no definida.
 
 ### Impacto
 Afecta:

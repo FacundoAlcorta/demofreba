@@ -262,6 +262,7 @@ Construir el módulo configurable mínimo para que el dominio de comunicación n
   - tipo ↔ workflow
   - tipo ↔ bandeja
   - tipo ↔ reglas mínimas de creación
+- dejar validado que el estado inicial de una comunicación pertenece al workflow asociado a su tipo
 - exponer endpoints de consulta para configuración
 
 ### Entregables
@@ -304,6 +305,7 @@ Implementar la entidad principal del sistema.
   - título
   - descripción
   - fechas
+- validar que `current_state` pertenezca al workflow asociado al tipo de comunicación
 - definir reglas iniciales de creación:
   - creación por externo
   - creación por FREBA
@@ -409,6 +411,16 @@ Bajar a código las reglas principales de acceso.
   - externo que recibe y debe responder
   - interno FREBA operativo
   - interno FREBA observador
+- cerrar perfil MVP ejecutable para acciones núcleo sin interpretación libre por endpoint:
+  - ver comunicación
+  - editar comunicación
+  - cambiar estado
+  - emitir respuesta formal
+  - ver/subir/versionar documentos
+  - usar chat interno y chat compartido
+  - agregar/quitar participantes
+  - crear subcomunicación
+- implementar en `v0.2` equivalencia operativa estricta entre roles editor y responsable
 
 ### Entregables
 - permisos mínimos consistentes
@@ -440,8 +452,10 @@ Implementar el soporte documental central del sistema.
   - subir nueva versión
   - obtener última versión
 - definir visibilidad:
-  - documentos visibles para externos
-  - documentos internos de trabajo
+  - documentos cargados por su propia organización
+  - adjuntos expuestos en el envío inicial
+  - documentos incluidos en la respuesta formal
+  - documentos internos de trabajo no visibles para externos
 
 ### Entregables
 - documentos versionados funcionando
@@ -465,7 +479,8 @@ Implementar la pieza formal y final de la comunicación.
 
 ### Tareas
 - modelar `FormalResponse`
-- decidir si almacena referencia directa a versiones documentales o a documentos vigentes al momento de emitir
+- modelar relación por `communication_id` único como fuente única de verdad (sin referencia paralela en `Communication`)
+- modelar selección de documentos de respuesta referenciando versiones documentales concretas
 - implementar endpoint para emitir respuesta
 - bloquear edición posterior
 - exponer visibilidad de respuesta a todos los participantes con acceso
@@ -522,6 +537,7 @@ Implementar la relación madre-hija.
 
 ### Tareas
 - modelar relación recursiva
+- operar en `v0.2` con vínculo canónico `child_of`
 - implementar creación de hija desde una madre
 - listar hijas de una comunicación
 - mostrar madre de una comunicación

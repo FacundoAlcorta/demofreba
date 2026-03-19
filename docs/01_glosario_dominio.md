@@ -195,7 +195,7 @@ La lógica de permisos se apoya en el rol sobre la comunicación, no solo en si 
 ### Observador
 Rol de seguimiento limitado dentro de una comunicación.
 
-En principio:
+En `v0.2`:
 
 - puede ver lo que le corresponda según su visibilidad
 - no puede gestionar la comunicación
@@ -203,6 +203,7 @@ En principio:
 - no puede cambiar estado
 - no puede administrar usuarios
 - no ve el chat interno
+- no usa chat compartido como rol observador puro
 
 Su alcance exacto puede variar según escenario, pero su lógica general es de consulta y seguimiento.
 
@@ -222,7 +223,7 @@ En esta etapa, el editor puede:
 - crear subcomunicaciones
 - emitir respuesta formal
 
-En `v0.2`, editor y responsable se consideran equivalentes en permisos.
+En `v0.2`, editor y responsable se consideran equivalentes en permisos y operaciones de implementación.
 
 ---
 
@@ -231,6 +232,8 @@ Rol operativo de trabajo activo sobre una comunicación.
 
 En términos funcionales actuales, tiene el mismo alcance que editor.  
 Se mantiene como concepto separado porque negocio podría definir más adelante diferencias entre ambos.
+
+En `v0.2`, backend puede tratarlos igual para autorización y operaciones núcleo.
 
 ---
 
@@ -311,7 +314,7 @@ En esta etapa:
 ### Documento vigente
 Última versión disponible de un documento.
 
-Es la versión que debe considerarse actual para trabajo operativo y, en principio, para exposición en respuesta.
+Es la versión que debe considerarse actual para trabajo operativo y para exposición cuando quede incluida en la respuesta formal.
 
 ---
 

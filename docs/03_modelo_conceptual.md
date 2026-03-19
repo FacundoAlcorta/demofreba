@@ -327,7 +327,7 @@ Clasificación funcional del nivel de intervención que un usuario tiene dentro 
 Define el alcance operativo del usuario sobre la comunicación.
 
 ### Observaciones
-- en esta etapa, editor y responsable se consideran equivalentes
+- en `v0.2`, editor y responsable se consideran equivalentes de implementación
 - el rol no debe pensarse aislado del escenario
 - a futuro podría enriquecerse o separarse mejor
 
@@ -425,7 +425,7 @@ Existen dos ámbitos:
 Vínculo que conecta dos comunicaciones para expresar contexto, continuidad o dependencia funcional.
 
 ### Relación principal actual
-- padre / hija
+- `child_of` (padre / hija)
 
 ### Responsabilidad conceptual
 Permitir que una comunicación pueda originar otra sin mezclar sus ciclos de vida.
@@ -435,6 +435,7 @@ Permitir que una comunicación pueda originar otra sin mezclar sus ciclos de vid
 - no hereda automáticamente todos sus datos
 - permite abrir una gestión nueva pero contextualizada
 - es clave para resolver continuidad después de una respuesta final
+- en `v0.2`, el uso operativo de relaciones entre comunicaciones se centra en `child_of`
 
 ---
 
@@ -571,7 +572,7 @@ Dar trazabilidad al ciclo de vida y permitir reconstruir qué pasó, cuándo y p
 ---
 
 ## 5.13 Comunicación ↔ Comunicación
-- una comunicación puede relacionarse con otra como madre o hija
+- una comunicación puede relacionarse con otra como madre o hija (`child_of` en `v0.2`)
 
 ---
 

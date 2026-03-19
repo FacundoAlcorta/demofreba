@@ -136,7 +136,7 @@ No puede:
 - ver expediente
 - ver documentos internos de trabajo de FREBA
 - ver chat interno FREBA
-- responder formalmente esa misma comunicación, salvo que el flujo cambie de escenario
+- responder formalmente esa misma comunicación en este escenario
 - cambiar estados como operador activo de tratamiento
 
 ---
@@ -207,6 +207,8 @@ No puede:
 - ver expediente
 - ver documentos internos de trabajo de FREBA no expuestos al exterior
 - administrar globalmente la comunicación fuera del alcance de su organización
+- crear subcomunicaciones como regla general en `v0.2` (queda pendiente de definición de negocio)
+- ejecutar el cierre administrativo final de la comunicación en `v0.2`
 
 ---
 
@@ -338,24 +340,26 @@ Ve:
 
 Es el caso de usuarios de FREBA que no trabajan activamente sobre una comunicación, pero necesitan seguirla, observarla o estar informados.
 
+En `v0.2`, este escenario se implementa como rol **observador**.
+
 ---
 
 ### 8.2 Qué puede hacer
 
-Según rol y configuración, puede:
+Puede:
 
 - ver la comunicación
 - seguir su estado
 - ver historial
 - ver documentos
 - ver relación con expediente
-- eventualmente participar del chat si su rol se lo permite
+- ver la respuesta formal cuando exista
 
 ---
 
-### 8.3 Qué no necesariamente puede hacer
+### 8.3 Qué no puede hacer en `v0.2`
 
-No necesariamente puede:
+No puede:
 
 - editar
 - cambiar estado
@@ -363,8 +367,8 @@ No necesariamente puede:
 - reasignar usuarios
 - asociar expedientes
 - crear subcomunicaciones
-
-Esto dependerá del rol que se le asigne.
+- usar chat interno
+- usar chat compartido
 
 ---
 
@@ -385,7 +389,9 @@ Esto dependerá del rol que se le asigne.
 | Cambiar estado | No |
 | Responder formalmente | No |
 | Ver expediente | No |
-| Crear réplica / hija tras cierre | Sí |
+| Crear réplica / hija tras respuesta formal final | Sí |
+
+Operativamente, esta continuidad suele darse cuando la comunicación original ya quedó cerrada o finalizada.
 
 ---
 
@@ -401,8 +407,10 @@ Esto dependerá del rol que se le asigne.
 | Usar chat compartido | Sí |
 | Ver chat interno | No |
 | Cambiar estado operativo | Sí |
+| Cerrar comunicación (cierre administrativo) | No en `v0.2` |
 | Emitir respuesta formal | Sí |
 | Ver expediente | No |
+| Crear subcomunicación | No habilitado en `v0.2` (pendiente de definición de negocio) |
 
 ---
 
@@ -441,7 +449,7 @@ Esto dependerá del rol que se le asigne.
 - ver chat interno
 
 ### Observación:
-El acceso a chat compartido no depende solo del nombre del rol, sino también del escenario y de la lógica de exposición definida para la comunicación.
+En `v0.2`, el rol observador no usa chat compartido.
 
 ---
 
